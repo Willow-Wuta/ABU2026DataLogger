@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logging Assister</title>
+</head>
+<body>
+    <h1>&lt&lt ABU Data Logger &gt&gt</h1>
+
+    <h1 id="display">00:00:00</h1>
+    <button onclick="start()">Start</button>
+    <button onclick="stop()">Stop</button>
+
+    <script>
+        let interval = null;
+        let milli = 0;
+
+        function start() {
+        if (interval) return;
+        interval = setInterval(() => {
+            milli++;
+            const m  = String(Math.floor(milli / 6000)).padStart(2, '0');
+            const s  = String(Math.floor((milli % 6000) / 100)).padStart(2, '0');
+            const ms = String(milli % 100).padStart(2, '0');
+            document.getElementById('display').textContent = `${m}:${s}:${ms}`;
+        }, 10);
+        }
+
+        function stop() {
+            if (interval){
+                clearInterval(interval);
+                interval = null;
+            }   
+            const m  = String(Math.floor(milli / 6000)).padStart(2, '0');
+            const s  = String(Math.floor((milli % 6000) / 100)).padStart(2, '0');
+            const ms = String(milli % 100).padStart(2, '0');
+            document.getElementById('display').textContent = `${m}:${s}:${ms}`;
+        }
+
+
+        // function stop() {
+        //     interval = setInterval(() => {
+        //         const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+        //         const s = String(seconds % 60).padStart(2, '0');
+        //         document.getElementById('display').textContent = `${h}:${m}:${s}`;
+        //     }, 1);   
+        // }
+    </script>
+
+</body>
+</html>
