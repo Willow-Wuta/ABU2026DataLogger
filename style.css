@@ -115,8 +115,8 @@ button {
     }
 
     button {
-        padding: 16px 32px;
-        font-size: 18px;
+        padding: 8px 12px;
+        font-size: 0.85rem;
         width: 100%;
     }
 
@@ -126,6 +126,5 @@ button {
         margin: 6px;
     }
 
-    h1 { font-size: 1.6rem; }
     h2 { font-size: 1.2rem; }
 }
