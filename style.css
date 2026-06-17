@@ -97,3 +97,34 @@ button {
 #Speardisplay {
     color: #a0a0a0;
 }
+
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .event-row {
+        flex-direction: column;
+    }
+
+    .event-column.narrow {
+        border-left: none;
+        border-top: 1px solid #4d4d4d;
+        padding-top: 16px;
+    }
+
+    button {
+        padding: 16px 32px;
+        font-size: 18px;
+        width: 100%;
+    }
+
+    input[type="checkbox"] {
+        width: 24px;
+        height: 24px;
+        margin: 6px;
+    }
+
+    h1 { font-size: 1.6rem; }
+    h2 { font-size: 1.2rem; }
+}
