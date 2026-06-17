@@ -19,8 +19,8 @@ body {
 }
 
 .button-group button {
-    font-size: 1.2rem;
-    padding: 10px 20px;
+    font-size: 0.85rem;
+    /* padding: 10px 20px; */
 }
 
 .titlecallout {
