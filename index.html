@@ -7,7 +7,7 @@
     
 </head>
 <body>
-    <div class="titlecallout">        
+    <div class="callout title">        
         <h2>Main Clock</h2>
 
         <h2 id="MainClock">00:00:00</h2>
@@ -19,9 +19,9 @@
 
     </div>
 
-    <h1></h1>
+    <!-- <h1></h1> -->
     
-    <div class="callout1">
+    <div class="callout zone1">
         <h2>Zone 1</h2>  
                 
         <div class="event-row">
@@ -50,10 +50,12 @@
             </div>
 
             <div class="event-column narrow">
-                <div class="button-group">
+                <div class="button-group" style="flex-direction: column; gap: 16px;">
+                    <button id="zone1Start" onclick="zone1Return()" disabled>Start</button>
                     <button onclick="SpearAssem()">Assem</button>
                 </div>
             </div>
+
         </div>
 
     </div>

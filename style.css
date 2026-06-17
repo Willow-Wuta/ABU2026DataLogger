@@ -18,29 +18,22 @@ body {
     background-color: #2b2b2b;
 }
 
-.button-group button {
-    font-size: 0.85rem;
-    /* padding: 10px 20px; */
-}
-
-.titlecallout {
+.callout {
     background-color: #343434;
-    border-left: 5px solid #00cabd;
-    border-radius: 8px;
+    margin-bottom: 20px;
+    border-radius: 10px;
     padding: 20px;
     width: 100%;
     box-sizing: border-box;
     color: #e0e0e0;
 }
 
-.callout1 {
-    background-color: #343434;
-    border-left: 5px solid #ca0000;
-    border-radius: 8px;
-    padding: 20px;
-    width: 100%;
-    box-sizing: border-box;
-    color: #e0e0e0;
+.title {
+    border-left: 8px solid #00cabd;
+}
+
+.zone1 {
+    border-left: 8px solid #ca0000;
 }
 
 .spear {
@@ -89,6 +82,11 @@ button {
     font-size: 16px;
 }
 
+button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
 .button-group {
     display: flex;
     justify-content: center;
@@ -97,6 +95,16 @@ button {
 
 #Speardisplay {
     color: #a0a0a0;
+}
+
+@keyframes blink {
+    0%   { opacity: 1; }
+    50%  { opacity: 0.3; }
+    100% { opacity: 1; }
+}
+
+.blink {
+    animation: blink 0.1s ease;
 }
 
 @media (max-width: 600px) {

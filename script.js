@@ -1,6 +1,7 @@
 let interval = null;
 let milli = 0;
 let logs = [];
+let assemPressed = false;
 
 function start() {
     if (interval) return;
@@ -13,7 +14,6 @@ function start() {
         const ms = String(milli % 100).padStart(2, '0');
 
         document.getElementById('MainClock').textContent = `${m}:${s}:${ms}`;
-        document.getElementById("SpearDisplay").textContent = `${m}:${s}:${ms}`;
     }, 10);
 }
 
@@ -37,12 +37,12 @@ function clearTimer() {
     }
 
     milli = 0;
-    logs = []; // wipe logs
+    logs = [];
+    assemPressed = false;
 
     document.getElementById("MainClock").textContent = "00:00:00";
-    document.getElementById("SpearDisplay").textContent = "00:00:00";
+    document.getElementById('zone1Start').disabled = true;
 
-    // Reset all checkboxes
     document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
 }
 
@@ -94,3 +94,36 @@ function logEvent(type, checkbox) {
         console.log(logs);
     }
 }
+
+function SpearAssem() {
+    const m = String(Math.floor(milli / 6000)).padStart(2, '0');
+    const s = String(Math.floor((milli % 6000) / 100)).padStart(2, '0');
+    const ms = String(milli % 100).padStart(2, '0');
+
+    logs.push({ type: 'Assem', time: `${m}:${s}:${ms}` });
+    console.log(logs);
+
+    // Unlock Start after first Assem
+    if (!assemPressed) {
+        assemPressed = true;
+        document.getElementById('zone1Start').disabled = false;
+    }
+}
+
+function zone1Return() {
+    const m = String(Math.floor(milli / 6000)).padStart(2, '0');
+    const s = String(Math.floor((milli % 6000) / 100)).padStart(2, '0');
+    const ms = String(milli % 100).padStart(2, '0');
+
+    logs.push({ type: 'Zone1_Return', time: `${m}:${s}:${ms}` });
+    console.log(logs);
+}
+
+function flashButton(btn) {
+    btn.classList.add('blink');
+    btn.addEventListener('animationend', () => btn.classList.remove('blink'), { once: true });
+}
+
+document.addEventListener('click', e => {
+    if (e.target.tagName === 'BUTTON') flashButton(e.target);
+});
