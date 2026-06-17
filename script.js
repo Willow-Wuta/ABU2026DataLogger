@@ -60,19 +60,6 @@ function exportJSON() {
     a.click();
 }
 
-function logEntry() {
-    const m = String(Math.floor(milli / 6000)).padStart(2, '0');
-    const s = String(Math.floor((milli % 6000) / 100)).padStart(2, '0');
-    const ms = String(milli % 100).padStart(2, '0');
-
-    const entry = {
-        time: `${m}:${s}:${ms}`
-    };
-
-    logs.push(entry);
-    console.log(logs);
-}
-
 function logEvent(type, checkbox) {
     if (checkbox.checked) {
         const m = String(Math.floor(milli / 6000)).padStart(2, '0');

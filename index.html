@@ -19,45 +19,37 @@
 
     </div>
 
-    <!-- <h1></h1> -->
-    
+
     <div class="callout zone1">
         <h2>Zone 1</h2>  
                 
-        <div class="event-row">
-            <div class="event-column wide">
-
-                <div class="spear-section">
-                    <h4>Spear</h4>
-                    <input type="checkbox" onclick="logEvent('1', this)">
-                    <input type="checkbox" onclick="logEvent('2', this)">
-                    <input type="checkbox" onclick="logEvent('3', this)">
-                    <input type="checkbox" onclick="logEvent('4', this)">
-                    <p>R1 ← Rack → R2</p>
-                </div>
-
-                <div class="spearhead-section">
-                    <h4>Spear Head</h4>
-                    <input type="checkbox" onclick="logEvent('Spear1', this)">
-                    <input type="checkbox" onclick="logEvent('Fist1', this)">
-                    <input type="checkbox" onclick="logEvent('Hand1', this)">
-                    <input type="checkbox" onclick="logEvent('Hand2', this)">
-                    <input type="checkbox" onclick="logEvent('Fist2', this)">
-                    <input type="checkbox" onclick="logEvent('Spear2', this)">
-                    <p>Outside ← Rack → Zone 2</p>
-                </div>
-
-            </div>
-
-            <div class="event-column narrow">
-                <div class="button-group" style="flex-direction: column; gap: 16px;">
-                    <button id="zone1Start" onclick="zone1Return()" disabled>Start</button>
-                    <button onclick="SpearAssem()">Assem</button>
-                </div>
-            </div>
-
+        <div class="spear-section">
+            <h4>Spear</h4>
+            <input type="checkbox" onclick="logEvent('1', this)">
+            <input type="checkbox" onclick="logEvent('2', this)">
+            <input type="checkbox" onclick="logEvent('3', this)">
+            <input type="checkbox" onclick="logEvent('4', this)">
+            <p>R1 ← Rack → R2</p>
         </div>
 
+        <div class="spearhead-section">
+            <h4>Spear Head</h4>
+            <input type="checkbox" onclick="logEvent('Spear1', this)">
+            <input type="checkbox" onclick="logEvent('Fist1', this)">
+            <input type="checkbox" onclick="logEvent('Hand1', this)">
+            <input type="checkbox" onclick="logEvent('Hand2', this)">
+            <input type="checkbox" onclick="logEvent('Fist2', this)">
+            <input type="checkbox" onclick="logEvent('Spear2', this)">
+            <p>Outside ← Rack → Zone 2</p>
+        </div>
+
+        <hr color="#a0a0a0">
+
+        <div class="button-group">
+            <button id="zone1Start" onclick="zone1Return()" disabled>Start</button>
+            <button onclick="SpearAssem()">Assem</button>
+        </div>
+        
     </div>
 
     <script src="script.js"></script>
