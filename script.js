@@ -44,6 +44,27 @@ function clearTimer() {
     document.getElementById('zone1Start').disabled = true;
 
     document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+
+    renderLog();
+}
+
+function renderLog() {
+    const output = document.getElementById('logOutput');
+
+    const team = document.getElementById('team-search').value || '—';
+    const side = document.getElementById('color').value || '—';
+    const header = `Team: ${team} &nbsp;|&nbsp; Side: ${side}`;
+
+    if (logs.length === 0) {
+        output.innerHTML = `${header}<br><br>No events logged yet.`;
+        return;
+    }
+
+    const entries = logs
+        .map(entry => `${entry.time} — ${entry.type}`)
+        .join('<br>');
+
+    output.innerHTML = `${header}<br><br>${entries}`;
 }
 
 function exportJSON() {
@@ -80,6 +101,8 @@ function logEvent(type, checkbox) {
         if (index !== -1) logs.splice(index, 1);
         console.log(logs);
     }
+
+    renderLog();
 }
 
 function SpearAssem() {
@@ -89,6 +112,8 @@ function SpearAssem() {
 
     logs.push({ type: 'Assem', time: `${m}:${s}:${ms}` });
     console.log(logs);
+
+    renderLog();
 
     // Unlock Start after first Assem
     if (!assemPressed) {
@@ -104,6 +129,8 @@ function zone1Return() {
 
     logs.push({ type: 'Zone1_Return', time: `${m}:${s}:${ms}` });
     console.log(logs);
+
+    renderLog();
 }
 
 function flashButton(btn) {
@@ -114,3 +141,8 @@ function flashButton(btn) {
 document.addEventListener('click', e => {
     if (e.target.tagName === 'BUTTON') flashButton(e.target);
 });
+
+document.getElementById('team-search').addEventListener('input', renderLog);
+document.getElementById('color').addEventListener('change', renderLog);
+
+renderLog();

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logging Assister</title>
     <link rel="stylesheet" href="style.css">
@@ -15,6 +16,47 @@
             <button onclick="start()">Start</button>
             <button onclick="stop()">Stop</button>
             <button onclick="clearTimer()">Clear</button>
+        </div>
+        
+        <hr width="300" color="#a0a0a0">
+        
+        <div class = "button-group">
+            
+            <label for="team-search" >Team:</label>
+            <input list="team-names" id="team-search" name="team-search" placeholder="Search...">
+    
+            <datalist id="team-names">
+                <!-- Uni -->
+                <option value="iRap-Savior">
+                <option value="Ivec">
+                <option value="Anong">
+                <option value="Chai">
+                
+                <!-- Voca -->
+                <option value="สาเกตนคร Robot">
+                <option value="ดอนเมือง">
+                <option value="KTC.DINOROBOT">
+                <option value="ขุนด่านปราการชล">
+                <option value="LTC.Robot">
+                    
+                <option value="สาละวิน Robot">
+                <option value="หมูชะมวง">
+                <option value="ยูคาลิปตัส">
+                <option value="ช้างน้าว Robot">
+                <option value="KKWIND The Conqueror">
+
+                <option value="รวงทองโรบอท">
+                <option value="แขวงเมืองวิเศษไชยชาญ">
+
+                </datalist>
+
+            <label for="color">Side:</label>
+            <select id="color" name="color">
+                <option value="" disabled selected></option>
+                <option value="Red">Red</option>
+                <option value="Blue">Blue</option>
+            </select>
+
         </div>
 
     </div>
@@ -50,6 +92,12 @@
             <button onclick="SpearAssem()">Assem</button>
         </div>
         
+    </div>
+
+    <div class="callout logger">
+        <h2>Log</h2>
+        <hr class="log-divider" color="#a0a0a0">
+        <div id="logOutput">No events logged yet.</div>
     </div>
 
     <script src="script.js"></script>

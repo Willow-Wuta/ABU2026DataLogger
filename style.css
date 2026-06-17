@@ -32,6 +32,22 @@ body {
     border-left: 8px solid #ca0000;
 }
 
+.logger {
+    border-left: 8px solid #8d8d8d;
+}
+
+.log-divider {
+    width: 60px;
+    margin: 8px auto 16px;
+}
+
+#logOutput {
+    color: #c0c0c0;
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: left;
+}
+
 .spear-section {
     margin-bottom: 20px;
     text-align: center;
