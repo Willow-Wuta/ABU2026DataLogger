@@ -2,49 +2,61 @@
 <html>
 <head>
     <title>Logging Assister</title>
+    <link rel="stylesheet" href="style.css">
+    
 </head>
 <body>
-    <h1>&lt&lt ABU Data Logger &gt&gt</h1>
+    <div class="titlecallout">        
+        <h1>Main Clock</h1>
 
-    <h1 id="display">00:00:00</h1>
-    <button onclick="start()">Start</button>
-    <button onclick="stop()">Stop</button>
+        <h1 id="MainClock">00:00:00</h1>
+        <div class = "button-group">
+            <button onclick="start()">Start</button>
+            <button onclick="stop()">Stop</button>
+            <button onclick="clearTimer()">Clear</button>
+        </div>
 
-    <script>
-        let interval = null;
-        let milli = 0;
+    </div>
 
-        function start() {
-        if (interval) return;
-        interval = setInterval(() => {
-            milli++;
-            const m  = String(Math.floor(milli / 6000)).padStart(2, '0');
-            const s  = String(Math.floor((milli % 6000) / 100)).padStart(2, '0');
-            const ms = String(milli % 100).padStart(2, '0');
-            document.getElementById('display').textContent = `${m}:${s}:${ms}`;
-        }, 10);
-        }
+    <h1></h1>
+    
+    <div class="callout1">
+        <h1>Zone 1</h1>  
+                
+        <div class="event-row">
+            <div class="event-column wide">
 
-        function stop() {
-            if (interval){
-                clearInterval(interval);
-                interval = null;
-            }   
-            const m  = String(Math.floor(milli / 6000)).padStart(2, '0');
-            const s  = String(Math.floor((milli % 6000) / 100)).padStart(2, '0');
-            const ms = String(milli % 100).padStart(2, '0');
-            document.getElementById('display').textContent = `${m}:${s}:${ms}`;
-        }
+                <div class="spear-section">
+                    <h2>Spear</h2>
+                    <input type="checkbox" onclick="logEvent('1', this)">
+                    <input type="checkbox" onclick="logEvent('2', this)">
+                    <input type="checkbox" onclick="logEvent('3', this)">
+                    <input type="checkbox" onclick="logEvent('4', this)">
+                    <p>R1 ← Rack → R2</p>
+                </div>
 
+                <div class="spearhead-section">
+                    <h2>Spear Head</h2>
+                    <input type="checkbox" onclick="logEvent('Spear1', this)">
+                    <input type="checkbox" onclick="logEvent('Fist1', this)">
+                    <input type="checkbox" onclick="logEvent('Hand1', this)">
+                    <input type="checkbox" onclick="logEvent('Hand2', this)">
+                    <input type="checkbox" onclick="logEvent('Fist2', this)">
+                    <input type="checkbox" onclick="logEvent('Spear2', this)">
+                    <p>Outside ← Rack → Zone 2</p>
+                </div>
 
-        // function stop() {
-        //     interval = setInterval(() => {
-        //         const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-        //         const s = String(seconds % 60).padStart(2, '0');
-        //         document.getElementById('display').textContent = `${h}:${m}:${s}`;
-        //     }, 1);   
-        // }
-    </script>
+            </div>
 
+            <div class="event-column narrow">
+                <div class="button-group">
+                    <button onclick="SpearAssem()">Assem</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>

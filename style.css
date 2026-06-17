@@ -1,0 +1,99 @@
+h1 {
+    text-align: center;
+}
+
+h2 {
+    text-align: center;
+}
+
+h3 {
+    text-align: center;
+}
+
+p {
+    color: #8d8d8d;
+}
+
+
+body {
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #2b2b2b;
+}
+
+.titlecallout {
+    background-color: #343434;
+    border-left: 5px solid #00cabd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    color: #e0e0e0;
+}
+
+.callout1 {
+    background-color: #343434;
+    border-left: 5px solid #ca0000;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    color: #e0e0e0;
+}
+
+.spear {
+    border-left-color: #457ec9;
+}
+
+.event-row {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+}
+
+.event-column {
+    text-align: center;
+    padding: 0 24px;
+}
+
+.event-column.wide {
+    flex: 4; /* ~80% */
+}
+
+.event-column.narrow {
+    flex: 1; /* ~20% */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid #4d4d4d;
+}
+
+.spear-section {
+    margin-bottom: 20px;
+}
+
+.spearhead-section {
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+button {
+    text-align: center;
+    background-color: #3a3a3a;
+    color: #e0e0e0;
+    border: 1px solid #666;
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-size: 16px;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+#Speardisplay {
+    color: #a0a0a0;
+}
