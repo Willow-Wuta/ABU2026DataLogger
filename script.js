@@ -9,6 +9,12 @@ let z3R2Score = 0;
 let enterBonus = 0;
 let z2R1Blocks = 0;
 let z2R2Blocks = 0;
+let z2R1PaidOut = 0;   // blocks already rewarded for R1
+let z2R2PaidOut = 0;   // blocks already rewarded for R2
+
+// Ground-pickup state: null = not picking, else epoch-ms when button pressed
+let groundPickR1Start = null;
+let groundPickR2Start = null;
 
 const TTT_POINTS = [80, 80, 80, 40, 40, 40, 30, 30, 30];
 const TTT_OWNER  = ['R2','R2','R2','R2','R2','R2','R1','R1','R1'];
@@ -41,24 +47,33 @@ function logTimestamped(type) {
 }
 
 // ── Clock ─────────────────────────────────────────────────────
+let startEpoch = null;  // Date.now() when timer last started
+let frozenMilli = 0;    // accumulated time before last stop
+
 function start() {
     if (interval) return;
+    startEpoch = Date.now() - frozenMilli * 10;
     interval = setInterval(() => {
-        milli++;
+        milli = Math.floor((Date.now() - startEpoch) / 10);
         document.getElementById('MainClock').textContent = formatTime(milli);
-    }, 10);
+    }, 50);
 }
 
 function stop() {
     if (interval) { clearInterval(interval); interval = null; }
+    frozenMilli = milli;
     document.getElementById('MainClock').textContent = formatTime(milli);
 }
 
 function clearTimer() {
     if (interval) { clearInterval(interval); interval = null; }
-    milli = 0; logs = []; assemPressed = false; assemCount = 0;
+    milli = 0; frozenMilli = 0; startEpoch = null; logs = []; assemPressed = false; assemCount = 0;
     z3R1Score = 0; z3R2Score = 0; enterBonus = 0;
     z2R1Blocks = 0; z2R2Blocks = 0;
+    z2R1PaidOut = 0; z2R2PaidOut = 0;
+    groundPickR1Start = null; groundPickR2Start = null;
+    setGroundBtn('R1', false);
+    setGroundBtn('R2', false);
     tttState.fill(false);
 
     document.getElementById('MainClock').textContent = '00:00:00';
@@ -204,27 +219,79 @@ function finishPicking() {
 
 // ── Zone 3 Enter ──────────────────────────────────────────────
 function zone3BothStart() {
-    const bonus = (z2R1Blocks + z2R2Blocks) * 10;
+    const newR1 = Math.max(0, z2R1Blocks - z2R1PaidOut);
+    const newR2 = Math.max(0, z2R2Blocks - z2R2PaidOut);
+    const bonus = (newR1 + newR2) * 10;
     enterBonus += bonus;
-    logTimestamped(`Z3_Enter_Both(+${bonus}pt) | R1:${z2R1Blocks}blk R2:${z2R2Blocks}blk`);
+    z2R1PaidOut += newR1;
+    z2R2PaidOut += newR2;
+    logTimestamped(`Z3_Enter_Both(+${bonus}pt) | R1:${z2R1Blocks}blk(+${newR1}new) R2:${z2R2Blocks}blk(+${newR2}new)`);
     updateScoreboard();
 }
 
 function zone3R1Start() {
-    const bonus = z2R1Blocks * 10;
+    const newR1 = Math.max(0, z2R1Blocks - z2R1PaidOut);
+    const bonus = newR1 * 10;
     enterBonus += bonus;
-    logTimestamped(`Z3_Enter_R1(+${bonus}pt) | R1 carried ${z2R1Blocks}blk`);
+    z2R1PaidOut += newR1;
+    logTimestamped(`Z3_Enter_R1(+${bonus}pt) | R1 carried ${z2R1Blocks}blk(+${newR1}new)`);
     updateScoreboard();
 }
 
 function zone3R2Start() {
-    const bonus = z2R2Blocks * 10;
+    const newR2 = Math.max(0, z2R2Blocks - z2R2PaidOut);
+    const bonus = newR2 * 10;
     enterBonus += bonus;
-    logTimestamped(`Z3_Enter_R2(+${bonus}pt) | R2 carried ${z2R2Blocks}blk`);
+    z2R2PaidOut += newR2;
+    logTimestamped(`Z3_Enter_R2(+${bonus}pt) | R2 carried ${z2R2Blocks}blk(+${newR2}new)`);
     updateScoreboard();
 }
 
-// ── Zone 3 Grid ───────────────────────────────────────────────
+// ── Ground Pickup (Zone 3) ────────────────────────────────────
+function setGroundBtn(player, active) {
+    const btn = document.getElementById(`groundPick${player}`);
+    if (!btn) return;
+    btn.classList.toggle('ground-active', active);
+    btn.textContent = active ? `${player} — Picking…` : `${player} Pickup`;
+}
+
+function toggleGroundPick(player) {
+    if (player === 'R1') {
+        if (groundPickR1Start === null) {
+            groundPickR1Start = Date.now();
+            logTimestamped(`R1_GroundPickup_Start`);
+            setGroundBtn('R1', true);
+        } else {
+            groundPickR1Start = null;
+            logTimestamped(`R1_GroundPickup_Cancel`);
+            setGroundBtn('R1', false);
+        }
+    } else {
+        if (groundPickR2Start === null) {
+            groundPickR2Start = Date.now();
+            logTimestamped(`R2_GroundPickup_Start`);
+            setGroundBtn('R2', true);
+        } else {
+            groundPickR2Start = null;
+            logTimestamped(`R2_GroundPickup_Cancel`);
+            setGroundBtn('R2', false);
+        }
+    }
+}
+
+function resolveGroundPick(player) {
+    if (player === 'R1' && groundPickR1Start !== null) {
+        const elapsed = ((Date.now() - groundPickR1Start) / 1000).toFixed(1);
+        logTimestamped(`R1_GroundPickup_Done(${elapsed}s)`);
+        groundPickR1Start = null;
+        setGroundBtn('R1', false);
+    } else if (player === 'R2' && groundPickR2Start !== null) {
+        const elapsed = ((Date.now() - groundPickR2Start) / 1000).toFixed(1);
+        logTimestamped(`R2_GroundPickup_Done(${elapsed}s)`);
+        groundPickR2Start = null;
+        setGroundBtn('R2', false);
+    }
+}
 function buildTTT() {
     const grid = document.getElementById('tttGrid');
     grid.innerHTML = '';
@@ -256,6 +323,7 @@ function onTTTClick(index, el) {
         el.classList.add(owner === 'R1' ? 'ttt-r1' : 'ttt-r2');
         if (owner === 'R1') z3R1Score += pts;
         else z3R2Score += pts;
+        resolveGroundPick(owner);   // auto-finish pickup timer if running
         logTimestamped(`${owner}_Z3Score_Cell${index+1}(+${pts}pt)`);
     } else {
         tttState[index] = false;

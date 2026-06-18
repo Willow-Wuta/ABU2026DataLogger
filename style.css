@@ -283,7 +283,27 @@ button:disabled {
     outline-offset: -3px;
 }
 
-/* ── Scoreboard ── */
+/* ── Ground Pickup ── */
+.ground-pickup-section {
+    text-align: center;
+    margin: 4px 0;
+}
+
+.ground-pickup-section h4 {
+    margin-bottom: 8px;
+}
+
+button.ground-active {
+    background-color: #4a3200;
+    border-color: #ffaa00;
+    color: #ffcc55;
+    animation: groundPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes groundPulse {
+    0%, 100% { box-shadow: 0 0 6px rgba(255,170,0,0.4); }
+    50%       { box-shadow: 0 0 14px rgba(255,170,0,0.9); }
+}
 .scoreboard {
     display: flex;
     flex-direction: column;

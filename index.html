@@ -144,9 +144,19 @@
             <button id="zone3R2Start" onclick="zone3R2Start()">R2</button>
         </div>
 
-        <hr color="#a0a0a0">
+        <hr color="#a0a0a0" width="350">
 
-        <!-- Tic-tac-toe grid -->
+        <!-- Ground Pickup -->
+        <div class="ground-pickup-section">
+            <h4>Ground Pickup</h4>
+            <div class="button-group">
+                <button id="groundPickR1" onclick="toggleGroundPick('R1')">R1 Pickup</button>
+                <button id="groundPickR2" onclick="toggleGroundPick('R2')">R2 Pickup</button>
+            </div>
+            <p style="font-size:0.75rem;margin:6px 0 0;">Press when robot starts picking a fallen block — auto-clears when ttt cell is placed</p>
+        </div>
+
+        <hr color="#a0a0a0">
         <div class="ttt-wrapper">
             <div class="ttt-grid" id="tttGrid">
                 <!-- 9 cells injected by JS -->
