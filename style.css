@@ -29,7 +29,15 @@ body {
 }
 
 .zone1 {
-    border-left: 8px solid #ca0000;
+    border-left: 8px solid #ca0065;
+}
+
+.zone2 {
+    border-left: 8px solid #86ffaf;
+}
+
+.zone3 {
+    border-left: 8px solid #5998df;
 }
 
 .logger {
@@ -108,4 +116,210 @@ button:disabled {
     }
 
     h2 { font-size: 1.2rem; }
+}
+
+/* ── Square Picker ── */
+.square-picker-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.square-picker-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.zone-label-top,
+.zone-label-bottom {
+    color: #8d8d8d;
+    font-size: 0.8rem;
+    margin: 0;
+    text-align: center;
+}
+
+.square-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 56px);
+    grid-template-rows: repeat(4, 56px);
+    gap: 6px;
+}
+
+.sq {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    position: relative;
+    transition: transform 0.1s, box-shadow 0.1s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.sq:hover:not(.picked-r1):not(.picked-r2) {
+    transform: scale(1.08);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+}
+
+.sq.picked-r1 {
+    border-color: #ff4444;
+    box-shadow: 0 0 10px rgba(255,68,68,0.7);
+    cursor: not-allowed;
+}
+
+.sq.picked-r2 {
+    border-color: #4488ff;
+    box-shadow: 0 0 10px rgba(68,136,255,0.7);
+    cursor: not-allowed;
+}
+
+/* overlay tint when picked */
+.sq.picked-r1::after,
+.sq.picked-r2::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 6px;
+}
+
+.sq.picked-r1::after { background: rgba(255,68,68,0.35); }
+.sq.picked-r2::after { background: rgba(68,136,255,0.35); }
+
+.square-picker-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.square-picker-controls button {
+    width: 120px;
+}
+
+#btnR1.active-player {
+    background-color: #7a1a1a;
+    border-color: #ff4444;
+    color: #ff9999;
+}
+
+#btnR2.active-player {
+    background-color: #1a2e6e;
+    border-color: #4488ff;
+    color: #99bbff;
+}
+/* ── Zone 3 Tic-Tac-Toe ── */
+.ttt-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.ttt-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 64px);
+    grid-template-rows: repeat(3, 64px);
+    gap: 6px;
+}
+
+.ttt-cell {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    background-color: #555;
+    border: 2px solid #666;
+    cursor: pointer;
+    transition: transform 0.1s, background-color 0.15s, box-shadow 0.15s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.ttt-cell:hover:not(.ttt-r1):not(.ttt-r2) {
+    transform: scale(1.07);
+    background-color: #6a6a6a;
+}
+
+.ttt-cell.ttt-r1 {
+    background-color: #b03030;
+    border-color: #ff4444;
+    box-shadow: 0 0 10px rgba(255,68,68,0.6);
+    cursor: pointer;
+}
+
+.ttt-cell.ttt-r2 {
+    background-color: #2244aa;
+    border-color: #4488ff;
+    box-shadow: 0 0 10px rgba(68,136,255,0.6);
+    cursor: pointer;
+}
+
+.ttt-legend {
+    font-size: 0.82rem;
+    color: #aaa;
+    line-height: 1.8;
+}
+
+.ttt-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+
+.ttt-r1-dot { background-color: #b03030; }
+.ttt-r2-dot { background-color: #2244aa; }
+
+/* inner squares that R1 cannot pick in Zone 2 */
+.sq-inner {
+    opacity: 0.55;
+    outline: 2px dashed #888;
+    outline-offset: -3px;
+}
+
+/* ── Scoreboard ── */
+.scoreboard {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.score-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.88rem;
+}
+
+.score-label {
+    color: #8d8d8d;
+    width: 130px;
+    flex-shrink: 0;
+}
+
+.score-val {
+    color: #e0e0e0;
+    font-weight: 600;
+    min-width: 80px;
+}
+
+.score-red  { color: #ff7070; }
+.score-blue { color: #6699ff; }
+
+.score-total-row {
+    margin-top: 6px;
+    padding-top: 8px;
+    border-top: 1px solid #555;
+}
+
+.score-total {
+    color: #00e5c0;
+    font-size: 1.1rem;
 }
