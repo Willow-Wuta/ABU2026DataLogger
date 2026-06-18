@@ -4,21 +4,16 @@ let logs = [];
 let assemPressed = false;
 let assemCount = 0;
 
-// ── Score state ──────────────────────────────────────────────
 let z3R1Score = 0;
 let z3R2Score = 0;
 let enterBonus = 0;
-
-// ── Zone 2 carry counts ──────────────────────────────────────
 let z2R1Blocks = 0;
 let z2R2Blocks = 0;
 
-// ── Zone 3 ttt state ─────────────────────────────────────────
 const TTT_POINTS = [80, 80, 80, 40, 40, 40, 30, 30, 30];
 const TTT_OWNER  = ['R2','R2','R2','R2','R2','R2','R1','R1','R1'];
 const tttState   = new Array(9).fill(false);
 
-// ── Zone 2 square picker ─────────────────────────────────────
 const SQUARE_COLORS = [
     '#007a3c', '#045713', '#007a3c',
     '#045713', '#007a3c', '#8bad56',
@@ -29,9 +24,7 @@ const R1_FORBIDDEN = new Set([4, 7]);
 let activePlayer = null;
 const squarePicks = {};
 
-// ─────────────────────────────────────────────────────────────
-// CLOCK
-// ─────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────
 function formatTime(t) {
     const m  = String(Math.floor(t / 6000)).padStart(2, '0');
     const s  = String(Math.floor((t % 6000) / 100)).padStart(2, '0');
@@ -39,6 +32,15 @@ function formatTime(t) {
     return `${m}:${s}:${ms}`;
 }
 
+function getTeam() { return document.getElementById('team-search').value || 'unknown'; }
+function getSide() { return document.getElementById('color').value || 'unknown'; }
+
+function logTimestamped(type) {
+    logs.push({ type, time: formatTime(milli) });
+    renderLog();
+}
+
+// ── Clock ─────────────────────────────────────────────────────
 function start() {
     if (interval) return;
     interval = setInterval(() => {
@@ -75,19 +77,10 @@ function clearTimer() {
     renderLog();
 }
 
-// ─────────────────────────────────────────────────────────────
-// LOG
-// ─────────────────────────────────────────────────────────────
-function logTimestamped(type) {
-    logs.push({ type, time: formatTime(milli) });
-    renderLog();
-}
-
+// ── Log ───────────────────────────────────────────────────────
 function renderLog() {
     const output = document.getElementById('logOutput');
-    const team = document.getElementById('team-search').value || '—';
-    const side = document.getElementById('color').value || '—';
-    const header = `Team: ${team} &nbsp;|&nbsp; Side: ${side}`;
+    const header = `Team: ${getTeam()} &nbsp;|&nbsp; Side: ${getSide()}`;
     if (logs.length === 0) {
         output.innerHTML = `${header}<br><br>No events logged yet.`;
         return;
@@ -95,11 +88,30 @@ function renderLog() {
     output.innerHTML = `${header}<br><br>` + logs.map(e => `${e.time} — ${e.type}`).join('<br>');
 }
 
+function exportTXT() {
+    const team = getTeam();
+    const side = getSide();
+    const header = `Team: ${team} | Side: ${side}\n${'─'.repeat(30)}\n`;
+    const entries = logs.length
+        ? logs.map(e => `${e.time}  ${e.type}`).join('\n')
+        : 'No events logged yet.';
+    const blob = new Blob([header + entries], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${team}_${side}_log.txt`;
+    a.click();
+}
+
 function exportJSON() {
+    const team = getTeam();
+    const side = getSide();
     const blob = new Blob([JSON.stringify(logs, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url; a.download = 'abu_log.json'; a.click();
+    a.href = url;
+    a.download = `${team}_${side}_log.json`;
+    a.click();
 }
 
 function logEvent(type, checkbox) {
@@ -112,12 +124,10 @@ function logEvent(type, checkbox) {
     renderLog();
 }
 
-// ─────────────────────────────────────────────────────────────
-// ZONE 1
-// ─────────────────────────────────────────────────────────────
+// ── Zone 1 ────────────────────────────────────────────────────
 function SpearAssem() {
     assemCount++;
-    logTimestamped(`Assem(+10pt)`);
+    logTimestamped('Assem(+10pt)');
     if (!assemPressed) {
         assemPressed = true;
         document.getElementById('zone1Start').disabled = false;
@@ -127,16 +137,12 @@ function SpearAssem() {
 
 function zone1Return() { logTimestamped('Zone1_Return'); }
 
-// ─────────────────────────────────────────────────────────────
-// ZONE 2 — Enter
-// ─────────────────────────────────────────────────────────────
+// ── Zone 2 Enter ──────────────────────────────────────────────
 function zone2BothStart() { logTimestamped('Z2_Enter_Both'); }
 function zone2R1Start()   { logTimestamped('Z2_Enter_R1'); }
 function zone2R2Start()   { logTimestamped('Z2_Enter_R2'); }
 
-// ─────────────────────────────────────────────────────────────
-// ZONE 2 — Square Picker
-// ─────────────────────────────────────────────────────────────
+// ── Zone 2 Square Picker ──────────────────────────────────────
 function buildGrid() {
     const grid = document.getElementById('squareGrid');
     grid.innerHTML = '';
@@ -196,9 +202,7 @@ function finishPicking() {
     document.getElementById('btnFinish').disabled = true;
 }
 
-// ─────────────────────────────────────────────────────────────
-// ZONE 3 — Enter
-// ─────────────────────────────────────────────────────────────
+// ── Zone 3 Enter ──────────────────────────────────────────────
 function zone3BothStart() {
     const bonus = (z2R1Blocks + z2R2Blocks) * 10;
     enterBonus += bonus;
@@ -220,9 +224,7 @@ function zone3R2Start() {
     updateScoreboard();
 }
 
-// ─────────────────────────────────────────────────────────────
-// ZONE 3 — Tic-tac-toe grid
-// ─────────────────────────────────────────────────────────────
+// ── Zone 3 Grid ───────────────────────────────────────────────
 function buildTTT() {
     const grid = document.getElementById('tttGrid');
     grid.innerHTML = '';
@@ -238,7 +240,6 @@ function buildTTT() {
 function onTTTClick(index, el) {
     const owner = TTT_OWNER[index];
     const pts   = TTT_POINTS[index];
-
     const r1Used = tttState.reduce((n,v,i) => n + (v && TTT_OWNER[i]==='R1' ? 1 : 0), 0);
     const r2Used = tttState.reduce((n,v,i) => n + (v && TTT_OWNER[i]==='R2' ? 1 : 0), 0);
 
@@ -263,27 +264,22 @@ function onTTTClick(index, el) {
         else z3R2Score -= pts;
         logTimestamped(`${owner}_Z3Unscore_Cell${index+1}(-${pts}pt)`);
     }
-
     updateScoreboard();
 }
 
-// ─────────────────────────────────────────────────────────────
-// SCOREBOARD
-// ─────────────────────────────────────────────────────────────
+// ── Scoreboard ────────────────────────────────────────────────
 function updateScoreboard() {
     document.getElementById('sbZ2R1').textContent = `R1: ${z2R1Blocks} blk`;
     document.getElementById('sbZ2R2').textContent = `R2: ${z2R2Blocks} blk`;
     document.getElementById('sbZ3R1').textContent = `R1: ${z3R1Score} pts`;
     document.getElementById('sbZ3R2').textContent = `R2: ${z3R2Score} pts`;
-    document.getElementById('sbEnterBonus').textContent  = `${enterBonus} pts`;
-    document.getElementById('sbAssemBonus').textContent  = `${assemCount * 10} pts`;
+    document.getElementById('sbEnterBonus').textContent = `${enterBonus} pts`;
+    document.getElementById('sbAssemBonus').textContent = `${assemCount * 10} pts`;
     const total = z3R1Score + z3R2Score + enterBonus + (assemCount * 10);
     document.getElementById('sbTotal').textContent = `${total} pts`;
 }
 
-// ─────────────────────────────────────────────────────────────
-// MISC
-// ─────────────────────────────────────────────────────────────
+// ── Misc ──────────────────────────────────────────────────────
 function flashButton(btn) {
     btn.classList.add('blink');
     btn.addEventListener('animationend', () => btn.classList.remove('blink'), { once: true });
