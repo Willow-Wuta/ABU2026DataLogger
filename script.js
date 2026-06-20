@@ -311,6 +311,22 @@ function resolveGroundPick(player) {
         setGroundBtn('R2', false);
     }
 }
+
+function finishGroundPickupNoPlace(player) {
+    if (player === 'R1' && groundPickR1Start !== null) {
+        const elapsed = ((Date.now() - groundPickR1Start) / 1000).toFixed(1);
+        logTimestamped(`R1_GroundPickup_NoPlace(${elapsed}s)`);
+        groundPickR1Start = null;
+        setGroundBtn('R1', false);
+    } else if (player === 'R2' && groundPickR2Start !== null) {
+        const elapsed = ((Date.now() - groundPickR2Start) / 1000).toFixed(1);
+        logTimestamped(`R2_GroundPickup_NoPlace(${elapsed}s)`);
+        groundPickR2Start = null;
+        setGroundBtn('R2', false);
+    } else {
+        logTimestamped(`${player}_GroundPickup_NoPlace(none active)`);
+    }
+}
 function buildTTT() {
     const grid = document.getElementById('tttGrid');
     grid.innerHTML = '';
