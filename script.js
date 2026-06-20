@@ -20,12 +20,21 @@ const TTT_POINTS = [80, 80, 80, 40, 40, 40, 30, 30, 30];
 const TTT_OWNER  = ['R2','R2','R2','R2','R2','R2','R1','R1','R1'];
 const tttState   = new Array(9).fill(false);
 
-const SQUARE_COLORS = [
+const SQUARE_COLORS_RED = [
     '#007a3c', '#045713', '#007a3c',
     '#045713', '#007a3c', '#8bad56',
     '#007a3c', '#8bad56', '#007a3c',
     '#045713', '#007a3c', '#045713'
 ];
+const SQUARE_COLORS_BLUE = [
+    '#007a3c', '#045713', '#007a3c',
+    '#8bad56', '#007a3c', '#045713',
+    '#007a3c', '#8bad56', '#007a3c',
+    '#045713', '#007a3c', '#045713'
+];
+function getSquareColors() {
+    return getSide() === 'Blue' ? SQUARE_COLORS_BLUE : SQUARE_COLORS_RED;
+}
 const R1_FORBIDDEN = new Set([4, 7]);
 let activePlayer = null;
 const squarePicks = {};
@@ -158,6 +167,16 @@ function zone2R1Start()   { logTimestamped('Z2_Enter_R1'); }
 function zone2R2Start()   { logTimestamped('Z2_Enter_R2'); }
 
 // ── Zone 2 Square Picker ──────────────────────────────────────
+function applyGridOrientation() {
+    const grid = document.getElementById('squareGrid');
+    if (!grid) return;
+    const colors = getSquareColors();
+    grid.querySelectorAll('.sq').forEach(sq => {
+        const i = Number(sq.dataset.index);
+        sq.style.backgroundColor = colors[i];
+    });
+}
+
 function buildGrid() {
     const grid = document.getElementById('squareGrid');
     grid.innerHTML = '';
@@ -165,11 +184,11 @@ function buildGrid() {
         const sq = document.createElement('div');
         sq.className = 'sq';
         if (R1_FORBIDDEN.has(i)) sq.classList.add('sq-inner');
-        sq.style.backgroundColor = SQUARE_COLORS[i];
         sq.dataset.index = i;
         sq.addEventListener('click', () => onSquareClick(i, sq));
         grid.appendChild(sq);
     }
+    applyGridOrientation();
 }
 
 function onSquareClick(index, el) {
@@ -358,7 +377,10 @@ document.addEventListener('click', e => {
 });
 
 document.getElementById('team-search').addEventListener('input', renderLog);
-document.getElementById('color').addEventListener('change', renderLog);
+document.getElementById('color').addEventListener('change', () => {
+    renderLog();
+    applyGridOrientation();
+});
 
 buildGrid();
 buildTTT();
