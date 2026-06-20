@@ -49,6 +49,7 @@ function formatTime(t) {
 
 function getTeam() { return document.getElementById('team-search').value || 'unknown'; }
 function getSide() { return document.getElementById('color').value || 'unknown'; }
+function getRound() { return document.getElementById('round-input').value || 'unknown'; }
 
 function logTimestamped(type) {
     logs.push({ type, time: formatTime(milli) });
@@ -104,7 +105,7 @@ function clearTimer() {
 // ── Log ───────────────────────────────────────────────────────
 function renderLog() {
     const output = document.getElementById('logOutput');
-    const header = `Team: ${getTeam()} &nbsp;|&nbsp; Side: ${getSide()}`;
+    const header = `Team: ${getTeam()} &nbsp;|&nbsp; Side: ${getSide()} &nbsp;|&nbsp; Round: ${getRound()}`;
     if (logs.length === 0) {
         output.innerHTML = `${header}<br><br>No events logged yet.`;
         return;
@@ -115,7 +116,8 @@ function renderLog() {
 function exportTXT() {
     const team = getTeam();
     const side = getSide();
-    const header = `Team: ${team} | Side: ${side}\n${'─'.repeat(30)}\n`;
+    const round = getRound();
+    const header = `Team: ${team} | Side: ${side} | Round: ${round}\n${'─'.repeat(30)}\n`;
     const entries = logs.length
         ? logs.map(e => `${e.time}  ${e.type}`).join('\n')
         : 'No events logged yet.';
@@ -123,18 +125,19 @@ function exportTXT() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${team}_${side}_log.txt`;
+    a.download = `${team}_${side}_${round.replace(/\s+/g, '')}_log.txt`;
     a.click();
 }
 
 function exportJSON() {
     const team = getTeam();
     const side = getSide();
-    const blob = new Blob([JSON.stringify(logs, null, 2)], { type: 'application/json' });
+    const round = getRound();
+    const blob = new Blob([JSON.stringify({ team, side, round, logs }, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${team}_${side}_log.json`;
+    a.download = `${team}_${side}_${round.replace(/\s+/g, '')}_log.json`;
     a.click();
 }
 
@@ -393,6 +396,7 @@ document.addEventListener('click', e => {
 });
 
 document.getElementById('team-search').addEventListener('input', renderLog);
+document.getElementById('round-input').addEventListener('input', renderLog);
 document.getElementById('color').addEventListener('change', () => {
     renderLog();
     applyGridOrientation();
