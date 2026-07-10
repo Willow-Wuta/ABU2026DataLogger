@@ -1,6 +1,6 @@
 # ABU2026 Logger
 
-A simple logging tool created to gather iRAP team logging data.
+A simple logging tool created to gather team's logging data.
 
 ## License
 
